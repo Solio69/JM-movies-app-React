@@ -43,7 +43,7 @@ export default class AntCard extends Component {
     const poster = `https://image.tmdb.org/t/p/w200/${poster_path}`;
     const shorOverview = this.shortenText(overview);
     const releaseDate = this.formatDateRelease(release_date);
-
+    
     return (
       <Card className="ant-card" hoverable cover={<img alt="example" src={poster} />}>
         <div className="ant-card-body_rating">6.6</div>
