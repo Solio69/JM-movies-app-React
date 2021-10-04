@@ -23,3 +23,15 @@ Movies App - Начало
 <!-- ф-я сокращения текста -->
 <!-- ф-я форматирования времени  -->
 eslint/prettier/husky/lint-staged
+
+npm i --save-dev eslint
+npm i --save-dev eslint-config-airbnb
+npm i --save-dev eslint-config-prettier
+npm i --save-dev eslint-plugin-import
+npm i --save-dev eslint-plugin-jsx-a11y
+npm i --save-dev prettier
+npm i --save-dev eslint-plugin-react
+npm i --save-dev eslint-plugin-react-hooks
+npm i --save-dev babel-eslint
+npm i --save-dev lint-staged
+
