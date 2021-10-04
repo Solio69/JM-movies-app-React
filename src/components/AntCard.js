@@ -40,7 +40,7 @@ export default class AntCard extends Component {
 
     const { title, poster_path, overview, release_date, genre_ids, vote_average } = this.props.item;
 
-    const poster= `https://image.tmdb.org/t/p/w200/${poster_path}`;
+    const poster = `https://image.tmdb.org/t/p/w200/${poster_path}`;
     const shorOverview = this.shortenText(overview);
     const releaseDate = this.formatDateRelease(release_date);
 
