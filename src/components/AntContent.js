@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import ApiServise from './ApiServise';
 import AntCard from './AntCard';
+import AntSpin from './AntSpin';
 
 import { Content } from 'antd/lib/layout/layout';
 
 export default class AntContent extends Component {
   state = {
     moviesList: [],
+    loading: true,
   };
   constructor(props) {
     super(props);
@@ -19,22 +21,32 @@ export default class AntContent extends Component {
     this.apiCall.getMovies().then((list) => {
       this.setState({
         moviesList: [...list],
+        loading: false,
       });
     });
   };
 
   render() {
-    const { moviesList } = this.state;
-    // console.log(list)
+    const { loading, moviesList } = this.state;
+    const spinner = loading ? <AntSpin /> : null;
+    const content = !loading ? <ShowList moviesList={moviesList} /> : null;
 
     return (
       <Content>
-        {moviesList.map((item, i) => {
-          const { id } = item;
-
-          return <AntCard item={item} key={id} />;
-        })}
+        {spinner}
+        {content}
       </Content>
     );
   }
 }
+
+const ShowList = ({ moviesList }) => {
+  return (
+    <React.Fragment>
+      {moviesList.map((item, i) => {
+        const { id } = item;
+        return <AntCard item={item} key={id} />;
+      })}
+    </React.Fragment>
+  );
+};

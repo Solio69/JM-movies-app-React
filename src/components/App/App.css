@@ -1,11 +1,10 @@
 body{
     background-color: #E5E5E5;
 }
+
 .container{
     max-width: 1010px;
     margin: 0 auto;
-    height: auto;
-    
     
 }
 .ant-layout-header{
@@ -17,6 +16,16 @@ body{
     font-size: 16px;
     line-height: 22px;
 }
+.ant-layout{
+    position: relative;
+}
+.loader {
+    position: absolute;
+    /* top: 50%; */
+    left: 50%;
+    bottom: 5%;
+    transform: translate(-50%, -50%);
+}
 .ant-layout-content{
     display: flex;
     flex-wrap: wrap;
@@ -25,6 +34,7 @@ body{
     background: #FFFFFF;
     
 }
+
 .ant-card{
     display: flex;
     margin-top: 32px;
