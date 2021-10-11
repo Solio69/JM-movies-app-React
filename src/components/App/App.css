@@ -21,10 +21,12 @@ body{
 }
 .loader {
     position: absolute;
-    /* top: 50%; */
     left: 50%;
     bottom: 5%;
     transform: translate(-50%, -50%);
+}
+.ant-alert{
+    width: 100%;
 }
 .ant-layout-content{
     display: flex;

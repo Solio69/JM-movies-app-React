@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import { Spin, Space } from 'antd';
 
 const AntSpin = () => (
