@@ -9,25 +9,25 @@ import { Content } from 'antd/lib/layout/layout';
 export default class AntContent extends Component {
   state = {
     moviesList: [],
-    loading: true,
+    loading: false,
     error: false,
   };
-  constructor(props) {
-    super(props);
-    this.getList();
-  }
 
-  // получает данные из API и записывает список фильмов в moviesList
-  apiCall = new ApiServise();
-  getList = () => {
-    this.apiCall
-      .getMovies()
+  getList = (searchQuery) => {
+    // инстанс ApiServise
+    const apiCall = new ApiServise();
+    // делаем запрос а сервер передаем значение из строки поиска
+    apiCall
+      .getMovies(searchQuery)
       .then((list) => {
         this.setState({
           moviesList: [...list],
           loading: false,
+          error: false,
         });
+        // console.log(this.state.moviesList)
       })
+      // обрабатывает ошибку
       .catch(this.onError);
   };
 
@@ -39,8 +39,17 @@ export default class AntContent extends Component {
     });
   };
 
+  componentDidUpdate(perevProps) {
+    if (this.props.searchQuery !== perevProps.searchQuery) {
+      this.setState({
+        loading: true,
+      });
+      this.getList(this.props.searchQuery);
+    }
+  }
+
   render() {
-    const { loading, moviesList, error } = this.state;
+    const { moviesList, loading, error } = this.state;
 
     const errorMessage = error ? <AntAlert /> : null;
     const spinner = loading ? <AntSpin /> : null;

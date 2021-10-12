@@ -10,12 +10,24 @@ import AntFooter from '../AntFooter';
 import { Layout } from 'antd';
 
 export default class App extends Component {
+  state = {
+    searchQuery: null,
+  };
+
+  onInputChange = (e) => {
+    this.setState({
+      searchQuery: e.target.value,
+    });
+  };
+
   render() {
+    const { searchQuery } = this.state;
+
     return (
       <div className="container">
         <Layout>
-          <AntHeader />
-          <AntContent />
+          <AntHeader onInputChange={this.onInputChange} />
+          <AntContent searchQuery={searchQuery} />
           <AntFooter />
         </Layout>
       </div>
