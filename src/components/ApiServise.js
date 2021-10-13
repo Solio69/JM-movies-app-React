@@ -5,8 +5,9 @@ export default class ApiServise {
 
     const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${searchQuery}&page=${currentPage}&language=en-US`;
 
-    console.log(searchQuery);
+    // console.log(searchQuery);
     const res = await fetch(url);
+    // console.log(res.status)
     if (!res.ok) {
       throw new Error(`error fetch URL ${url}, response status ${res.status}`);
     }

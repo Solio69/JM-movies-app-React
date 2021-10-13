@@ -5,5 +5,4 @@ const AntSpin = () => (
     <Spin size="large" className="loader" />
   </Space>
 );
-
 export default AntSpin;

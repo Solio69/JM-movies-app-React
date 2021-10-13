@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
+// components
 import ApiServise from './ApiServise';
 import AntCard from './AntCard';
 import AntSpin from './AntSpin';
-import AntAlert from './AntAlert';
+
+import { Alert } from 'antd';
 
 import { Content } from 'antd/lib/layout/layout';
+import { debounce } from 'lodash';
 
 export default class AntContent extends Component {
   state = {
     moviesList: [],
     loading: false,
     error: false,
+    notFound: false,
   };
 
+  // получить список фильмов
   getList = (searchQuery) => {
     // инстанс ApiServise
     const apiCall = new ApiServise();
@@ -24,12 +29,19 @@ export default class AntContent extends Component {
           moviesList: [...list],
           loading: false,
           error: false,
+          notFound: false,
         });
-        // console.log(this.state.moviesList)
+        if (this.state.moviesList.length === 0) {
+          this.setState({
+            notFound: true,
+          });
+        }
       })
       // обрабатывает ошибку
       .catch(this.onError);
   };
+  // задержка запроса
+  debounced = debounce(this.getList, 500);
 
   // обрабатывает ошибку данных с сервера
   onError = () => {
@@ -43,16 +55,33 @@ export default class AntContent extends Component {
     if (this.props.searchQuery !== perevProps.searchQuery) {
       this.setState({
         loading: true,
+        error: false,
+        notFound: false,
       });
-      this.getList(this.props.searchQuery);
+      this.debounced(this.props.searchQuery);
     }
   }
 
   render() {
-    const { moviesList, loading, error } = this.state;
+    const { moviesList, loading, error, notFound } = this.state;
+    // console.log(moviesList)
 
-    const errorMessage = error ? <AntAlert /> : null;
+    // сообщение об ошибке
+    const errorMessage =
+      error && this.props.searchQuery !== '' ? (
+        <Alert message="Error" description="Oops, something went wrong :-(" type="error" showIcon />
+      ) : null;
+
+    // сообщение об отсутствии результатов поиска
+    const onNotFound =
+      !error && !loading && notFound ? (
+        <Alert message="No results were found for your search!" type="info" showIcon />
+      ) : null;
+
+    // индикатор загрузки
     const spinner = loading ? <AntSpin /> : null;
+
+    // обображенеи списка фильмов
     const content = !(loading || error) ? <ShowList moviesList={moviesList} /> : null;
 
     return (
@@ -60,6 +89,7 @@ export default class AntContent extends Component {
         {spinner}
         {content}
         {errorMessage}
+        {onNotFound}
       </Content>
     );
   }
