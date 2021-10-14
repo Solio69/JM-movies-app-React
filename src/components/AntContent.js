@@ -18,12 +18,12 @@ export default class AntContent extends Component {
   };
 
   // получить список фильмов
-  getList = (searchQuery) => {
+  getList = (searchQuery, numberPage) => {
     // инстанс ApiServise
     const apiCall = new ApiServise();
     // делаем запрос а сервер передаем значение из строки поиска
     apiCall
-      .getMovies(searchQuery)
+      .getMovies(searchQuery, numberPage)
       .then((list) => {
         this.setState({
           moviesList: [...list],
@@ -37,7 +37,6 @@ export default class AntContent extends Component {
           });
         }
       })
-      // обрабатывает ошибку
       .catch(this.onError);
   };
   // задержка запроса
@@ -52,23 +51,24 @@ export default class AntContent extends Component {
   };
 
   componentDidUpdate(perevProps) {
-    if (this.props.searchQuery !== perevProps.searchQuery) {
+    if (this.props.searchQuery !== perevProps.searchQuery || this.props.numberPage !== perevProps.numberPage) {
       this.setState({
         loading: true,
         error: false,
-        notFound: false,
+        // notFound: false,
       });
-      this.debounced(this.props.searchQuery);
+      this.debounced(this.props.searchQuery, this.props.numberPage);
     }
   }
 
   render() {
     const { moviesList, loading, error, notFound } = this.state;
+    const { searchQuery } = this.props;
     // console.log(moviesList)
 
     // сообщение об ошибке
     const errorMessage =
-      error && this.props.searchQuery !== '' ? (
+      error && searchQuery !== '' ? (
         <Alert message="Error" description="Oops, something went wrong :-(" type="error" showIcon />
       ) : null;
 

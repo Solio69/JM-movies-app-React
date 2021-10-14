@@ -12,23 +12,31 @@ import { Layout } from 'antd';
 export default class App extends Component {
   state = {
     searchQuery: null,
+    numberPage: 1,
   };
 
   onInputChange = (e) => {
     this.setState({
       searchQuery: e.target.value,
+      numberPage: 1,
+    });
+  };
+
+  onPageChange = (page) => {
+    this.setState({
+      numberPage: page,
     });
   };
 
   render() {
-    const { searchQuery } = this.state;
-
+    const { searchQuery, numberPage } = this.state;
+    // console.log(numberPage);
     return (
       <div className="container">
         <Layout>
           <AntHeader onInputChange={this.onInputChange} />
-          <AntContent searchQuery={searchQuery} />
-          <AntFooter />
+          <AntContent searchQuery={searchQuery} numberPage={numberPage} />
+          <AntFooter onPageChange={this.onPageChange} searchQuery={searchQuery} numberPage={numberPage} />
         </Layout>
       </div>
     );

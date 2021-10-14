@@ -45,7 +45,7 @@ export default class AntCard extends Component {
     const releaseDate = release_date ? this.formatDateRelease(release_date) : null;
 
     return (
-      <Card className="ant-card" hoverable cover={<img alt="example" src={poster} />}>
+      <Card className="ant-card" hoverable cover={<img alt="poster" src={poster} />}>
         <div className="ant-card-body_rating">6.6</div>
         <div className="ant-card-body_title">{title}</div>
         <div className="ant-card-body_data">{releaseDate}</div>
