@@ -12,10 +12,10 @@ export default class ApiServise {
     }
     const body = await res.json();
     // console.log(body);
-    // return {
-    //   totalPages: body.total_pages,
-    //   list: body.results
-    // }
-    return body.results;
+    return {
+      totalPages: body.total_pages,
+      list: body.results,
+    };
+    // return body.results;
   }
 }

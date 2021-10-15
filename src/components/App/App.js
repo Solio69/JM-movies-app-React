@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 // components
 import AntHeader from '../AntHeader';
 import AntContent from '../AntContent';
-import AntFooter from '../AntFooter';
 
 import { Layout } from 'antd';
 
@@ -15,6 +14,7 @@ export default class App extends Component {
     numberPage: 1,
   };
 
+  // следит за строкой ввода
   onInputChange = (e) => {
     this.setState({
       searchQuery: e.target.value,
@@ -22,6 +22,7 @@ export default class App extends Component {
     });
   };
 
+  // следит за компонентом пагинации
   onPageChange = (page) => {
     this.setState({
       numberPage: page,
@@ -35,8 +36,7 @@ export default class App extends Component {
       <div className="container">
         <Layout>
           <AntHeader onInputChange={this.onInputChange} />
-          <AntContent searchQuery={searchQuery} numberPage={numberPage} />
-          <AntFooter onPageChange={this.onPageChange} searchQuery={searchQuery} numberPage={numberPage} />
+          <AntContent searchQuery={searchQuery} numberPage={numberPage} onPageChange={this.onPageChange} />
         </Layout>
       </div>
     );

@@ -5,8 +5,9 @@ import AntCard from './AntCard';
 import AntSpin from './AntSpin';
 
 import { Alert } from 'antd';
-
+import { Pagination } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
+
 import { debounce } from 'lodash';
 
 export default class AntContent extends Component {
@@ -15,6 +16,7 @@ export default class AntContent extends Component {
     loading: false,
     error: false,
     notFound: false,
+    totalPages: null,
   };
 
   // получить список фильмов
@@ -24,12 +26,12 @@ export default class AntContent extends Component {
     // делаем запрос а сервер передаем значение из строки поиска
     apiCall
       .getMovies(searchQuery, numberPage)
-      .then((list) => {
+      .then((res) => {
         this.setState({
-          moviesList: [...list],
+          moviesList: [...res.list],
           loading: false,
           error: false,
-          notFound: false,
+          totalPages: res.totalPages,
         });
         if (this.state.moviesList.length === 0) {
           this.setState({
@@ -55,16 +57,16 @@ export default class AntContent extends Component {
       this.setState({
         loading: true,
         error: false,
-        // notFound: false,
+        notFound: false,
       });
       this.debounced(this.props.searchQuery, this.props.numberPage);
     }
   }
 
   render() {
-    const { moviesList, loading, error, notFound } = this.state;
-    const { searchQuery } = this.props;
-    // console.log(moviesList)
+    const { moviesList, loading, error, notFound, totalPages } = this.state;
+    const { searchQuery, numberPage, onPageChange } = this.props;
+    // console.log(totalPages);
 
     // сообщение об ошибке
     const errorMessage =
@@ -82,26 +84,41 @@ export default class AntContent extends Component {
     const spinner = loading ? <AntSpin /> : null;
 
     // обображенеи списка фильмов
-    const content = !(loading || error) ? <ShowList moviesList={moviesList} /> : null;
+    const content = !(loading || error) ? (
+      <React.Fragment>
+        {moviesList.map((item) => {
+          const { id } = item;
+          return <AntCard item={item} key={id} />;
+        })}
+      </React.Fragment>
+    ) : null;
+
+    // пагинация
+    const quickJumper = totalPages > 5 ? true : false; // показывать ли окно ввода страницы
+    const total = totalPages * 10; // сколько всего страниц
+
+    const onPagination =
+      moviesList.length !== 0 && searchQuery !== '' ? (
+        <Pagination
+          size="small"
+          showQuickJumper={quickJumper}
+          defaultCurrent={numberPage}
+          total={total}
+          onChange={onPageChange}
+          showSizeChanger={false}
+        ></Pagination>
+      ) : null;
 
     return (
-      <Content>
-        {spinner}
-        {content}
-        {errorMessage}
-        {onNotFound}
-      </Content>
+      <React.Fragment>
+        <Content>
+          {spinner}
+          {content}
+          {errorMessage}
+          {onNotFound}
+        </Content>
+        {onPagination}
+      </React.Fragment>
     );
   }
 }
-
-const ShowList = ({ moviesList }) => {
-  return (
-    <React.Fragment>
-      {moviesList.map((item, i) => {
-        const { id } = item;
-        return <AntCard item={item} key={id} />;
-      })}
-    </React.Fragment>
-  );
-};

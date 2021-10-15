@@ -123,8 +123,10 @@ body{
     padding: 39px 50px 0;
 }
 .ant-pagination{
+    background: #FFFFFF;
     text-align: center;
-margin-bottom: 18px;
+    padding-bottom: 18px;
+    padding-top: 37px;
     
 }
 
