@@ -35,17 +35,21 @@ export default class AntCard extends Component {
     }
   };
 
+  // cardClick = () => {
+  //   console.log('clic')
+  // }
+
   render() {
     // console.log(this.props.item)
-
-    const { title, poster_path, overview, release_date, genre_ids, vote_average } = this.props.item;
+    const { addInRatedList } = this.props;
+    const { id, title, poster_path, overview, release_date, genre_ids, vote_average } = this.props.item;
 
     const poster = `https://image.tmdb.org/t/p/w200/${poster_path}`;
     const shorOverview = this.shortenText(overview);
     const releaseDate = release_date ? this.formatDateRelease(release_date) : null;
 
     return (
-      <Card className="ant-card" hoverable cover={<img alt="poster" src={poster} />}>
+      <Card className="ant-card" hoverable cover={<img alt="poster" src={poster} />} onClick={() => addInRatedList(id)}>
         <div className="ant-card-body_rating">6.6</div>
         <div className="ant-card-body_title">{title}</div>
         <div className="ant-card-body_data">{releaseDate}</div>

@@ -10,7 +10,7 @@ import { Content } from 'antd/lib/layout/layout';
 
 import { debounce } from 'lodash';
 
-export default class AntContent extends Component {
+export default class AntSearchContent extends Component {
   state = {
     moviesList: [],
     loading: false,
@@ -23,6 +23,7 @@ export default class AntContent extends Component {
   getList = (searchQuery, numberPage) => {
     // инстанс ApiServise
     const apiCall = new ApiServise();
+
     // делаем запрос а сервер передаем значение из строки поиска
     apiCall
       .getMovies(searchQuery, numberPage)
@@ -33,6 +34,11 @@ export default class AntContent extends Component {
           error: false,
           totalPages: res.totalPages,
         });
+
+        // передаем moviesList компоненту App
+        const { getMoviesList } = this.props;
+        getMoviesList(this.state.moviesList);
+
         if (this.state.moviesList.length === 0) {
           this.setState({
             notFound: true,
@@ -65,7 +71,7 @@ export default class AntContent extends Component {
 
   render() {
     const { moviesList, loading, error, notFound, totalPages } = this.state;
-    const { searchQuery, numberPage, onPageChange } = this.props;
+    const { searchQuery, numberPage, onPageChange, addInRatedList } = this.props;
     // console.log(totalPages);
 
     // сообщение об ошибке
@@ -88,7 +94,7 @@ export default class AntContent extends Component {
       <React.Fragment>
         {moviesList.map((item) => {
           const { id } = item;
-          return <AntCard item={item} key={id} />;
+          return <AntCard item={item} key={id} addInRatedList={addInRatedList} />;
         })}
       </React.Fragment>
     ) : null;
@@ -98,7 +104,7 @@ export default class AntContent extends Component {
     const total = totalPages * 10; // сколько всего страниц
 
     const onPagination =
-      moviesList.length !== 0 && searchQuery !== '' ? (
+      moviesList.length !== 0 && searchQuery !== '' && !loading ? (
         <Pagination
           size="small"
           showQuickJumper={quickJumper}

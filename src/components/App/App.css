@@ -7,10 +7,29 @@ body{
     margin: 0 auto;
     
 }
+.ant-tabs{
+    min-height: 100vh;
+    background: #FFFFFF;
+    
+}
+.ant-tabs-nav-wrap{
+    justify-content: center;
+}
+.ant-tabs-tab{
+    padding-top: 19px;
+    padding-bottom: 10px;
+}
+.ant-tabs-top > .ant-tabs-nav{
+    margin-bottom: 0;
+}
+.ant-tabs-top > .ant-tabs-nav::before{
+    display: none;
+}
 .ant-layout-header{
     background: #FFFFFF;
     padding: 0 32px;
 }
+
 .ant-input{
     height: 40px;
     font-size: 16px;
@@ -18,7 +37,7 @@ body{
 }
 .ant-layout{
     position: relative;
-    min-height: 100vh;
+    /* min-height: 100vh; */
 }
 .loader {
     position: absolute;
