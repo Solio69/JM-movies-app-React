@@ -10,6 +10,33 @@ import {
 } from '@ant-design/icons';
 
 export default class AntCard extends Component {
+  state = {
+    genresList: [],
+    filmGenres: [],
+  };
+
+  componentDidMount() {
+    // получает общий список жанров
+    this.setState({
+      genresList: [...this.props.genresList],
+    });
+  }
+
+  // вовзращает список жанров каждого фильма
+  movieGenreList = (genresIdsArr) => {
+    const newfilmGenres = [];
+    const { genresList } = this.state;
+    for (let genreId of genresIdsArr) {
+      genresList.forEach((el) => {
+        if (el.id === genreId) {
+          newfilmGenres.push(el.name);
+        }
+      });
+    }
+    // console.log(newfilmGenres)
+    return newfilmGenres;
+  };
+
   // форматирует сроку даты выхода фильма
   formatDateRelease = (dataStr) => {
     return format(new Date(dataStr), 'MMM Q, y');
@@ -35,12 +62,7 @@ export default class AntCard extends Component {
     }
   };
 
-  // cardClick = () => {
-  //   console.log('clic')
-  // }
-
   render() {
-    // console.log(this.props.item)
     const { addInRatedList } = this.props;
     const { id, title, poster_path, overview, release_date, genre_ids, vote_average } = this.props.item;
 
@@ -48,15 +70,25 @@ export default class AntCard extends Component {
     const shorOverview = this.shortenText(overview);
     const releaseDate = release_date ? this.formatDateRelease(release_date) : null;
 
+    const genreArr = this.movieGenreList(genre_ids);
+    const filmGenres = (
+      <React.Fragment>
+        {genreArr.map((item, ind) => {
+          return (
+            <span className="ant-card-body_genre-item" key={ind}>
+              {item}
+            </span>
+          );
+        })}
+      </React.Fragment>
+    );
+
     return (
       <Card className="ant-card" hoverable cover={<img alt="poster" src={poster} />} onClick={() => addInRatedList(id)}>
         <div className="ant-card-body_rating">6.6</div>
         <div className="ant-card-body_title">{title}</div>
         <div className="ant-card-body_data">{releaseDate}</div>
-        <div className="ant-card-body_genres">
-          <span className="ant-card-body_genre-item">Action</span>
-          <span className="ant-card-body_genre-item">Drama</span>
-        </div>
+        <div className="ant-card-body_genres">{filmGenres}</div>
         <p className="ant-card-body_text"> {shorOverview}</p>
 
         <div className="ant-card-body_genre-stars">

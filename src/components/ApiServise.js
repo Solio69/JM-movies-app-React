@@ -1,8 +1,8 @@
 export default class ApiServise {
-  async getMovies(searchQuery, numberPage) {
-    const apiKey = '162123c84167fbeaf28191b62529a99d';
+  apiKey = '162123c84167fbeaf28191b62529a99d';
 
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${searchQuery}&page=${numberPage}&language=en-US`;
+  async getMovies(searchQuery, numberPage) {
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${searchQuery}&page=${numberPage}&language=en-US`;
 
     // console.log(numberPage);
     const res = await fetch(url);
@@ -17,5 +17,17 @@ export default class ApiServise {
       list: body.results,
     };
     // return body.results;
+  }
+
+  async getGenres() {
+    const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${this.apiKey}&language=en-US`;
+
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`error fetch URL ${url}, response status ${res.status}`);
+    }
+    const body = await res.json();
+    // console.log(body)
+    return body.genres;
   }
 }

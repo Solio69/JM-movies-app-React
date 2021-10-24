@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import AntHeader from '../AntHeader';
 import AntSearchContent from '../AntSearchContent';
 import AntRatedContent from '../AntRatedContent';
+import ApiServise from '../ApiServise';
 
 import { Layout } from 'antd';
 import { Tabs } from 'antd';
@@ -16,8 +17,18 @@ export default class App extends Component {
     searchQuery: null,
     numberPage: 1,
     ratedList: [],
+    genresList: [],
   };
 
+  componentDidMount() {
+    // получаем список жанров
+    const apiCall = new ApiServise();
+    apiCall.getGenres().then((list) => {
+      this.setState({
+        genresList: [...list],
+      });
+    });
+  }
   // следит за строкой ввода
   onInputChange = (e) => {
     this.setState({
@@ -46,11 +57,12 @@ export default class App extends Component {
 
   // ТЕСТ получает moviesList из AntSearchContent
   getMoviesList = (list) => {
-    console.log(list);
+    // console.log(list);
   };
 
   render() {
-    const { searchQuery, numberPage, ratedList } = this.state;
+    // console.log(this.state.genresList)
+    const { searchQuery, numberPage, ratedList, genresList } = this.state;
     return (
       <div className="container">
         <Layout>
@@ -63,6 +75,7 @@ export default class App extends Component {
                 onPageChange={this.onPageChange}
                 addInRatedList={this.addInRatedList}
                 getMoviesList={this.getMoviesList}
+                genresList={genresList}
               />
             </TabPane>
             <TabPane tab="Rated" key="2">
