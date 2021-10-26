@@ -4,6 +4,9 @@ import ApiServise from './ApiServise';
 import AntCard from './AntCard';
 import AntSpin from './AntSpin';
 
+// react context
+import { GenresListConsumer } from './GenresListContext';
+
 import { Alert } from 'antd';
 import { Pagination } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
@@ -71,7 +74,7 @@ export default class AntSearchContent extends Component {
 
   render() {
     const { moviesList, loading, error, notFound, totalPages } = this.state;
-    const { searchQuery, numberPage, onPageChange, addInRatedList, genresList } = this.props;
+    const { searchQuery, numberPage, onPageChange, addInRatedList } = this.props;
     // console.log(totalPages);
 
     // сообщение об ошибке
@@ -91,12 +94,18 @@ export default class AntSearchContent extends Component {
 
     // обображенеи списка фильмов
     const content = !(loading || error) ? (
-      <React.Fragment>
-        {moviesList.map((item) => {
-          const { id } = item;
-          return <AntCard item={item} key={id} addInRatedList={addInRatedList} genresList={genresList} />;
-        })}
-      </React.Fragment>
+      <GenresListConsumer>
+        {(genresList) => {
+          return (
+            <React.Fragment>
+              {moviesList.map((item) => {
+                const { id } = item;
+                return <AntCard item={item} key={id} addInRatedList={addInRatedList} genresList={genresList} />;
+              })}
+            </React.Fragment>
+          );
+        }}
+      </GenresListConsumer>
     ) : null;
 
     // пагинация

@@ -2,6 +2,9 @@ import 'antd/dist/antd.css';
 import './App.css';
 import React, { Component } from 'react';
 
+// react context
+import { GenresListProvider } from '../GenresListContext';
+
 // components
 import AntHeader from '../AntHeader';
 import AntSearchContent from '../AntSearchContent';
@@ -64,26 +67,28 @@ export default class App extends Component {
     // console.log(this.state.genresList)
     const { searchQuery, numberPage, ratedList, genresList } = this.state;
     return (
-      <div className="container">
-        <Layout>
-          <Tabs defaultActiveKey="1">
-            <TabPane tab="Search" key="1">
-              <AntHeader onInputChange={this.onInputChange} />
-              <AntSearchContent
-                searchQuery={searchQuery}
-                numberPage={numberPage}
-                onPageChange={this.onPageChange}
-                addInRatedList={this.addInRatedList}
-                getMoviesList={this.getMoviesList}
-                genresList={genresList}
-              />
-            </TabPane>
-            <TabPane tab="Rated" key="2">
-              <AntRatedContent ratedList={ratedList} />
-            </TabPane>
-          </Tabs>
-        </Layout>
-      </div>
+      <GenresListProvider value={this.state.genresList}>
+        <div className="container">
+          <Layout>
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="Search" key="1">
+                <AntHeader onInputChange={this.onInputChange} />
+                <AntSearchContent
+                  searchQuery={searchQuery}
+                  numberPage={numberPage}
+                  onPageChange={this.onPageChange}
+                  addInRatedList={this.addInRatedList}
+                  getMoviesList={this.getMoviesList}
+                  genresList={genresList}
+                />
+              </TabPane>
+              <TabPane tab="Rated" key="2">
+                <AntRatedContent ratedList={ratedList} />
+              </TabPane>
+            </Tabs>
+          </Layout>
+        </div>
+      </GenresListProvider>
     );
   }
 }

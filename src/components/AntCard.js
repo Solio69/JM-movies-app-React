@@ -11,23 +11,14 @@ import {
 
 export default class AntCard extends Component {
   state = {
-    genresList: [],
-    filmGenres: [],
+    genresList: this.props.genresList,
   };
 
-  componentDidMount() {
-    // получает общий список жанров
-    this.setState({
-      genresList: [...this.props.genresList],
-    });
-  }
-
-  // вовзращает список жанров каждого фильма
+  // вовзращает список жанров каждого конкретного фильма
   movieGenreList = (genresIdsArr) => {
     const newfilmGenres = [];
-    const { genresList } = this.state;
     for (let genreId of genresIdsArr) {
-      genresList.forEach((el) => {
+      this.state.genresList.forEach((el) => {
         if (el.id === genreId) {
           newfilmGenres.push(el.name);
         }
@@ -70,13 +61,15 @@ export default class AntCard extends Component {
     const shorOverview = this.shortenText(overview);
     const releaseDate = release_date ? this.formatDateRelease(release_date) : null;
 
+    // получает список жанров каждогоконкретного фильма
     const genreArr = this.movieGenreList(genre_ids);
+    // добавляет жанр в список жанров карточки
     const filmGenres = (
       <React.Fragment>
-        {genreArr.map((item, ind) => {
+        {genreArr.map((genre, ind) => {
           return (
             <span className="ant-card-body_genre-item" key={ind}>
-              {item}
+              {genre}
             </span>
           );
         })}
