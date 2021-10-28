@@ -38,10 +38,6 @@ export default class AntSearchContent extends Component {
           totalPages: res.totalPages,
         });
 
-        // передаем moviesList компоненту App
-        const { getMoviesList } = this.props;
-        getMoviesList(this.state.moviesList);
-
         if (this.state.moviesList.length === 0) {
           this.setState({
             notFound: true,
@@ -75,7 +71,7 @@ export default class AntSearchContent extends Component {
   render() {
     const { moviesList, loading, error, notFound, totalPages } = this.state;
     const { searchQuery, numberPage, onPageChange, addInRatedList } = this.props;
-    // console.log(totalPages);
+    // console.log(moviesList);
 
     // сообщение об ошибке
     const errorMessage =

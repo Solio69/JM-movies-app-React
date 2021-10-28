@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import { format } from 'date-fns';
 
 import { Card } from 'antd';
-
-// icons
-import {
-  // StarOutlined,
-  StarFilled,
-} from '@ant-design/icons';
+import { Rate } from 'antd';
 
 export default class AntCard extends Component {
   state = {
     genresList: this.props.genresList,
+    rate: null,
   };
 
   // вовзращает список жанров каждого конкретного фильма
@@ -53,6 +49,13 @@ export default class AntCard extends Component {
     }
   };
 
+  onRate = (grade) => {
+    // console.log(grade)
+    this.setState({
+      rate: grade,
+    });
+  };
+
   render() {
     const { addInRatedList } = this.props;
     const { id, title, poster_path, overview, release_date, genre_ids, vote_average } = this.props.item;
@@ -85,16 +88,7 @@ export default class AntCard extends Component {
         <p className="ant-card-body_text"> {shorOverview}</p>
 
         <div className="ant-card-body_genre-stars">
-          <StarFilled style={{ fontSize: '16px', color: '#E9D100' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#E9D100' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#E9D100' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#DCDCDC' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#DCDCDC' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#DCDCDC' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#DCDCDC' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#DCDCDC' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#DCDCDC' }} />
-          <StarFilled style={{ fontSize: '16px', color: '#DCDCDC' }} />
+          <Rate defaultValue={0} count={10} onChange={this.onRate} />
         </div>
       </Card>
     );

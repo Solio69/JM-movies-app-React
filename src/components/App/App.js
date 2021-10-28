@@ -13,6 +13,7 @@ import ApiServise from '../ApiServise';
 
 import { Layout } from 'antd';
 import { Tabs } from 'antd';
+import { isArgumentPlaceholder } from '@babel/types';
 const { TabPane } = Tabs;
 
 export default class App extends Component {
@@ -21,11 +22,21 @@ export default class App extends Component {
     numberPage: 1,
     ratedList: [],
     genresList: [],
+    token: null,
   };
 
   componentDidMount() {
-    // получаем список жанров
+    // инициализация класса вызова API
     const apiCall = new ApiServise();
+
+    // запускает гостевую сессию
+    apiCall.creatGuestSession().then((guestToken) => {
+      this.setState({
+        token: guestToken,
+      });
+      console.log(this.state.token);
+    });
+
     apiCall.getGenres().then((list) => {
       this.setState({
         genresList: [...list],
@@ -47,20 +58,16 @@ export default class App extends Component {
     });
   };
 
-  // ТЕСТ добавляет id элемента в массив ratedList (через AntSearchContent, addInRatedList)
+  // ТЕСТ по клику передает оценку фильма
   addInRatedList = (id) => {
-    this.setState(({ ratedList }) => {
-      const newArr = [...ratedList];
-      newArr.push(id);
-      return {
-        ratedList: newArr,
-      };
-    });
-  };
+    // console.log(this.state.token)
+    // console.log("id", id, typeof id)
+    const apiCall = new ApiServise();
 
-  // ТЕСТ получает moviesList из AntSearchContent
-  getMoviesList = (list) => {
-    // console.log(list);
+    // оценить фильм
+    apiCall.rateFilm(id, this.state.token);
+    // получить список оцененных фильмов в пределах госетвой сесии
+    apiCall.getRatedFilms(this.state.token);
   };
 
   render() {
@@ -77,8 +84,8 @@ export default class App extends Component {
                   searchQuery={searchQuery}
                   numberPage={numberPage}
                   onPageChange={this.onPageChange}
+                  // ТЕСТ
                   addInRatedList={this.addInRatedList}
-                  getMoviesList={this.getMoviesList}
                   genresList={genresList}
                 />
               </TabPane>

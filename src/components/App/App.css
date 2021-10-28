@@ -136,6 +136,12 @@ body{
     display: flex;
     align-items: center;
 }
+.ant-rate-star:not(:last-child){
+    margin-right: 6px
+}
+.anticon-star svg{
+    width:15px
+}
 
 .ant-layout-footer{
     background: #FFFFFF;
