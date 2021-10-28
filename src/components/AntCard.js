@@ -4,10 +4,11 @@ import { format } from 'date-fns';
 import { Card } from 'antd';
 import { Rate } from 'antd';
 
+import ApiServise from './ApiServise';
+
 export default class AntCard extends Component {
   state = {
     genresList: this.props.genresList,
-    rate: null,
   };
 
   // вовзращает список жанров каждого конкретного фильма
@@ -49,20 +50,24 @@ export default class AntCard extends Component {
     }
   };
 
-  onRate = (grade) => {
-    // console.log(grade)
-    this.setState({
-      rate: grade,
-    });
+  // получает значение оценки и отправляет его на сервер
+  ratingСhanges = (grade) => {
+    const id = this.props.item.id;
+    const token = this.props.token;
+
+    const apiCall = new ApiServise();
+    apiCall.rateFilm(id, token, grade);
   };
 
   render() {
-    const { addInRatedList } = this.props;
-    const { id, title, poster_path, overview, release_date, genre_ids, vote_average } = this.props.item;
+    const { title, poster_path, overview, release_date, genre_ids, rating, vote_average } = this.props.item;
 
     const poster = `https://image.tmdb.org/t/p/w200/${poster_path}`;
     const shorOverview = this.shortenText(overview);
     const releaseDate = release_date ? this.formatDateRelease(release_date) : null;
+
+    // если был оценен, то передает оценку
+    const showRating = rating ? rating : 0;
 
     // получает список жанров каждогоконкретного фильма
     const genreArr = this.movieGenreList(genre_ids);
@@ -80,15 +85,15 @@ export default class AntCard extends Component {
     );
 
     return (
-      <Card className="ant-card" hoverable cover={<img alt="poster" src={poster} />} onClick={() => addInRatedList(id)}>
-        <div className="ant-card-body_rating">6.6</div>
+      <Card className="ant-card" hoverable cover={<img alt="poster" src={poster} />}>
+        <div className="ant-card-body_rating">{vote_average}</div>
         <div className="ant-card-body_title">{title}</div>
         <div className="ant-card-body_data">{releaseDate}</div>
         <div className="ant-card-body_genres">{filmGenres}</div>
         <p className="ant-card-body_text"> {shorOverview}</p>
 
         <div className="ant-card-body_genre-stars">
-          <Rate defaultValue={0} count={10} onChange={this.onRate} />
+          <Rate defaultValue={showRating} count={10} onChange={this.ratingСhanges} />
         </div>
       </Card>
     );

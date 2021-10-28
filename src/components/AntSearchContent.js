@@ -70,7 +70,7 @@ export default class AntSearchContent extends Component {
 
   render() {
     const { moviesList, loading, error, notFound, totalPages } = this.state;
-    const { searchQuery, numberPage, onPageChange, addInRatedList } = this.props;
+    const { searchQuery, numberPage, onPageChange, token } = this.props;
     // console.log(moviesList);
 
     // сообщение об ошибке
@@ -96,7 +96,7 @@ export default class AntSearchContent extends Component {
             <React.Fragment>
               {moviesList.map((item) => {
                 const { id } = item;
-                return <AntCard item={item} key={id} addInRatedList={addInRatedList} genresList={genresList} />;
+                return <AntCard item={item} key={id} genresList={genresList} token={token} />;
               })}
             </React.Fragment>
           );

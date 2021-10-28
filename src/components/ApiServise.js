@@ -50,11 +50,11 @@ export default class ApiServise {
   }
 
   // ТЕСТ оценивает фильм
-  async rateFilm(id, token) {
+  async rateFilm(id, token, rate) {
     const url = `https://api.themoviedb.org/3/movie/${id}/rating?api_key=${this.apiKey}&guest_session_id=${token}`;
 
     const body = {
-      value: 8,
+      value: rate,
     };
     const headers = {
       'Content-Type': 'application/json;charset=utf-8',
@@ -64,11 +64,12 @@ export default class ApiServise {
       body: JSON.stringify(body),
       headers: headers,
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
+      return res;
     });
   }
 
-  // ТЕСТ получает списо оцененных фильмов
+  // ТЕСТ получает список оцененных фильмов
   async getRatedFilms(token) {
     const url = `https://api.themoviedb.org/3/guest_session/${token}/rated/movies?api_key=${this.apiKey}`;
 
@@ -78,6 +79,7 @@ export default class ApiServise {
       throw new Error(`error fetch URL ${url}, response status ${res.status}`);
     }
     const result = await res.json();
-    console.log(result);
+    // console.log(res);
+    return result;
   }
 }

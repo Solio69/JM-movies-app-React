@@ -13,15 +13,15 @@ import ApiServise from '../ApiServise';
 
 import { Layout } from 'antd';
 import { Tabs } from 'antd';
-import { isArgumentPlaceholder } from '@babel/types';
+
 const { TabPane } = Tabs;
 
 export default class App extends Component {
   state = {
     searchQuery: null,
     numberPage: 1,
-    ratedList: [],
     genresList: [],
+    rateList: [],
     token: null,
   };
 
@@ -34,15 +34,16 @@ export default class App extends Component {
       this.setState({
         token: guestToken,
       });
-      console.log(this.state.token);
     });
 
+    // получает список жанров
     apiCall.getGenres().then((list) => {
       this.setState({
         genresList: [...list],
       });
     });
   }
+
   // следит за строкой ввода
   onInputChange = (e) => {
     this.setState({
@@ -58,39 +59,39 @@ export default class App extends Component {
     });
   };
 
-  // ТЕСТ по клику передает оценку фильма
-  addInRatedList = (id) => {
-    // console.log(this.state.token)
-    // console.log("id", id, typeof id)
-    const apiCall = new ApiServise();
-
-    // оценить фильм
-    apiCall.rateFilm(id, this.state.token);
-    // получить список оцененных фильмов в пределах госетвой сесии
-    apiCall.getRatedFilms(this.state.token);
+  // клик по табу
+  onTabClick = (key) => {
+    // получает список оцененных
+    if (key === '2') {
+      const apiCall = new ApiServise();
+      apiCall.getRatedFilms(this.state.token).then((res) => {
+        // console.log(res);
+        this.setState({
+          rateList: [...res.results],
+        });
+      });
+    }
   };
 
   render() {
     // console.log(this.state.genresList)
-    const { searchQuery, numberPage, ratedList, genresList } = this.state;
+    const { searchQuery, numberPage, genresList, token, rateList } = this.state;
     return (
-      <GenresListProvider value={this.state.genresList}>
+      <GenresListProvider value={genresList}>
         <div className="container">
           <Layout>
-            <Tabs defaultActiveKey="1">
+            <Tabs defaultActiveKey="1" onTabClick={this.onTabClick}>
               <TabPane tab="Search" key="1">
                 <AntHeader onInputChange={this.onInputChange} />
                 <AntSearchContent
                   searchQuery={searchQuery}
                   numberPage={numberPage}
                   onPageChange={this.onPageChange}
-                  // ТЕСТ
-                  addInRatedList={this.addInRatedList}
-                  genresList={genresList}
+                  token={token}
                 />
               </TabPane>
               <TabPane tab="Rated" key="2">
-                <AntRatedContent ratedList={ratedList} />
+                <AntRatedContent token={token} rateList={rateList} />
               </TabPane>
             </Tabs>
           </Layout>
