@@ -59,18 +59,45 @@ export default class AntCard extends Component {
     apiCall.rateFilm(id, token, grade);
   };
 
+  // возвращает цвет блока с рейтингом
+  defineRatingСolor = (num) => {
+    let color;
+    if (num <= 3) {
+      // От 0 до 3 - #E90000
+      color = '#E90000';
+    } else if (num <= 5) {
+      // От 3 до 5 - #E97E00
+      color = '#E97E00';
+    } else if (num <= 7) {
+      // От 5 до 7 - #E9D100
+      color = '#E9D100';
+    } else if (num > 7) {
+      // Выше 7 - #66E900
+      color = '#66E900';
+    }
+
+    return {
+      borderColor: color,
+    };
+  };
   render() {
     const { title, poster_path, overview, release_date, genre_ids, rating, vote_average } = this.props.item;
-
+    // отформатированный постер
     const poster = `https://image.tmdb.org/t/p/w200/${poster_path}`;
+
+    // сокращенный текст
     const shorOverview = this.shortenText(overview);
     const releaseDate = release_date ? this.formatDateRelease(release_date) : null;
+
+    // цвет блока с рейтингом
+    const ratingСolor = this.defineRatingСolor(vote_average);
 
     // если был оценен, то передает оценку
     const showRating = rating ? rating : 0;
 
-    // получает список жанров каждогоконкретного фильма
+    // список жанров каждого конкретного фильма
     const genreArr = this.movieGenreList(genre_ids);
+
     // добавляет жанр в список жанров карточки
     const filmGenres = (
       <React.Fragment>
@@ -86,7 +113,9 @@ export default class AntCard extends Component {
 
     return (
       <Card className="ant-card" hoverable cover={<img alt="poster" src={poster} />}>
-        <div className="ant-card-body_rating">{vote_average}</div>
+        <div style={ratingСolor} className="ant-card-body_rating">
+          {vote_average}
+        </div>
         <div className="ant-card-body_title">{title}</div>
         <div className="ant-card-body_data">{releaseDate}</div>
         <div className="ant-card-body_genres">{filmGenres}</div>
