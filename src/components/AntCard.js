@@ -52,11 +52,17 @@ export default class AntCard extends Component {
 
   // получает значение оценки и отправляет его на сервер
   ratingСhanges = (grade) => {
+    const apiCall = new ApiServise();
     const id = this.props.item.id;
     const token = this.props.token;
 
-    const apiCall = new ApiServise();
-    apiCall.rateFilm(id, token, grade);
+    if (grade === 0) {
+      // если оценка 0, то отправляет запрос на удаление оенки
+      apiCall.deleteRateFilm(id, token);
+    } else {
+      // отправляет запрос на добавление оценки
+      apiCall.rateFilm(id, token, grade);
+    }
   };
 
   // возвращает цвет блока с рейтингом
@@ -80,20 +86,26 @@ export default class AntCard extends Component {
       borderColor: color,
     };
   };
+
   render() {
-    const { title, poster_path, overview, release_date, genre_ids, rating, vote_average } = this.props.item;
+    // console.log(this.state.showRating)
+    const { title, poster_path, overview, release_date, genre_ids, vote_average, rating } = this.props.item;
+
+    // rating = this.state.showRating
     // отформатированный постер
     const poster = `https://image.tmdb.org/t/p/w200/${poster_path}`;
 
     // сокращенный текст
     const shorOverview = this.shortenText(overview);
+
+    // форматирование даты
     const releaseDate = release_date ? this.formatDateRelease(release_date) : null;
 
     // цвет блока с рейтингом
     const ratingСolor = this.defineRatingСolor(vote_average);
 
     // если был оценен, то передает оценку
-    const showRating = rating ? rating : 0;
+    let onRating = rating ? rating : 0;
 
     // список жанров каждого конкретного фильма
     const genreArr = this.movieGenreList(genre_ids);
@@ -122,7 +134,7 @@ export default class AntCard extends Component {
         <p className="ant-card-body_text"> {shorOverview}</p>
 
         <div className="ant-card-body_genre-stars">
-          <Rate defaultValue={showRating} count={10} onChange={this.ratingСhanges} />
+          <Rate disabled={onRating ? true : false} defaultValue={onRating} count={10} onChange={this.ratingСhanges} />
         </div>
       </Card>
     );

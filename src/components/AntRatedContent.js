@@ -5,6 +5,10 @@ import { GenresListConsumer } from './GenresListContext';
 import AntCard from './AntCard';
 
 export default class AntRatedContent extends Component {
+  state = {
+    showRating: null,
+  };
+
   render() {
     // console.log(this.props.rateList)
     const { rateList } = this.props;

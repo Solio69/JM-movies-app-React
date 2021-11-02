@@ -1,57 +1,51 @@
 export default class ApiServise {
   apiKey = '162123c84167fbeaf28191b62529a99d';
+  baseStr = 'https://api.themoviedb.org/3/';
+
+  // шаблон GET запроса
+  requestGet = (url) => {
+    return fetch(url).then((res) => {
+      if (!res.ok) {
+        throw new Error(`error fetch URL ${url}, response status ${res.status}`);
+      }
+      return res.json();
+    });
+  };
 
   // гостевая сессия
   async creatGuestSession() {
-    const url = `https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${this.apiKey}`;
+    const url = `${this.baseStr}authentication/guest_session/new?api_key=${this.apiKey}`;
 
-    const res = await fetch(url);
-
-    if (!res.ok) {
-      throw new Error(`error fetch URL ${url}, response status ${res.status}`);
-    }
-    const result = await res.json();
-    // console.log(result)
-    const sessionId = result.guest_session_id;
-    // console.log(sessionId)
+    const body = await this.requestGet(url);
+    // console.log(body)
+    const sessionId = body.guest_session_id;
     return sessionId;
   }
 
   // получить список фильмов по поиску
   async getMovies(searchQuery, numberPage) {
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${searchQuery}&page=${numberPage}&language=en-US`;
+    const url = `${this.baseStr}search/movie?api_key=${this.apiKey}&query=${searchQuery}&page=${numberPage}`;
 
-    // console.log(numberPage);
-    const res = await fetch(url);
-    // console.log(res.status)
-    if (!res.ok) {
-      throw new Error(`error fetch URL ${url}, response status ${res.status}`);
-    }
-    const body = await res.json();
-    // console.log(body);
+    const body = await this.requestGet(url);
+    // console.log(body)
     return {
       totalPages: body.total_pages,
       list: body.results,
     };
-    // return body.results;
   }
 
   // получить список жанров
   async getGenres() {
-    const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${this.apiKey}&language=en-US`;
+    const url = `${this.baseStr}genre/movie/list?api_key=${this.apiKey}`;
 
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(`error fetch URL ${url}, response status ${res.status}`);
-    }
-    const body = await res.json();
+    const body = await this.requestGet(url);
     // console.log(body)
     return body.genres;
   }
 
-  // ТЕСТ оценивает фильм
+  // оценивает фильм
   async rateFilm(id, token, rate) {
-    const url = `https://api.themoviedb.org/3/movie/${id}/rating?api_key=${this.apiKey}&guest_session_id=${token}`;
+    const url = `${this.baseStr}movie/${id}/rating?api_key=${this.apiKey}&guest_session_id=${token}`;
 
     const body = {
       value: rate,
@@ -63,23 +57,27 @@ export default class ApiServise {
       method: 'POST',
       body: JSON.stringify(body),
       headers: headers,
-    }).then((res) => {
-      // console.log(res);
-      return res;
     });
   }
 
-  // ТЕСТ получает список оцененных фильмов
+  async deleteRateFilm(id, token) {
+    const url = `${this.baseStr}movie/${id}/rating?api_key=${this.apiKey}&guest_session_id=${token}`;
+
+    const headers = {
+      'Content-Type': 'application/json;charset=utf-8',
+    };
+    return await fetch(url, {
+      method: 'DELETE',
+      headers: headers,
+    });
+  }
+
+  // получает список оцененных фильмов
   async getRatedFilms(token) {
-    const url = `https://api.themoviedb.org/3/guest_session/${token}/rated/movies?api_key=${this.apiKey}`;
+    const url = `${this.baseStr}guest_session/${token}/rated/movies?api_key=${this.apiKey}`;
 
-    const res = await fetch(url);
-
-    if (!res.ok) {
-      throw new Error(`error fetch URL ${url}, response status ${res.status}`);
-    }
-    const result = await res.json();
-    // console.log(res);
-    return result;
+    const body = await this.requestGet(url);
+    // console.log(body)
+    return body;
   }
 }

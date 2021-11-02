@@ -146,3 +146,51 @@ body{
     padding-top: 37px;
     
 }
+
+@media (max-width: 975px){
+    .ant-layout-content{
+        justify-content: center;
+    }
+}
+@media (max-width: 550px){
+    
+    
+    .ant-card {
+        padding: 5px 10px 0;
+        /* width: 310px; */
+    }
+    .ant-card-cover img{
+        width: 91px;
+    }
+    .ant-card-body{
+
+    }
+    .ant-card-body_text{
+        position: absolute;
+        bottom:60px;
+        left: 10px;
+        right:  10px;
+    }
+    .ant-card-body_rating{
+        right: 5px;
+        top: 5px;
+    }
+    .ant-card-body_genre-stars{
+        position: absolute;
+        bottom: 12px;
+        right: 10px;
+        
+    }
+    
+}
+
+@media (max-width: 410px){
+    .ant-layout-header{
+        padding: 0 10px;
+     
+    }
+    .ant-card {
+        
+        width: 315px;
+    }
+}
