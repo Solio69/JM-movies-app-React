@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 // react context
 import { GenresListProvider } from '../GenresListContext';
 
-// components
 import AntHeader from '../AntHeader';
 import AntSearchContent from '../AntSearchContent';
 import AntRatedContent from '../AntRatedContent';
@@ -65,7 +64,6 @@ export default class App extends Component {
     if (key === '2') {
       const apiCall = new ApiServise();
       apiCall.getRatedFilms(this.state.token).then((res) => {
-        // console.log(res);
         this.setState({
           rateList: [...res.results],
         });
@@ -74,7 +72,6 @@ export default class App extends Component {
   };
 
   render() {
-    // console.log(this.state.genresList)
     const { searchQuery, numberPage, genresList, token, rateList } = this.state;
     return (
       <GenresListProvider value={genresList}>

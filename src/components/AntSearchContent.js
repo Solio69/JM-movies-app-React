@@ -27,8 +27,8 @@ export default class AntSearchContent extends Component {
     // инстанс ApiServise
     const apiCall = new ApiServise();
 
-    // делаем запрос а сервер передаем значение из строки поиска
     apiCall
+      // делаем запрос а сервер передаем значение из строки поиска
       .getMovies(searchQuery, numberPage)
       .then((res) => {
         this.setState({
@@ -38,6 +38,7 @@ export default class AntSearchContent extends Component {
           totalPages: res.totalPages,
         });
 
+        // если поиск не дал результатов (пустой массив)
         if (this.state.moviesList.length === 0) {
           this.setState({
             notFound: true,
@@ -58,20 +59,21 @@ export default class AntSearchContent extends Component {
   };
 
   componentDidUpdate(perevProps) {
-    if (this.props.searchQuery !== perevProps.searchQuery || this.props.numberPage !== perevProps.numberPage) {
+    const { searchQuery, numberPage } = this.props;
+
+    if (searchQuery !== perevProps.searchQuery || numberPage !== perevProps.numberPage) {
       this.setState({
         loading: true,
         error: false,
         notFound: false,
       });
-      this.debounced(this.props.searchQuery, this.props.numberPage);
+      this.debounced(searchQuery, numberPage);
     }
   }
 
   render() {
     const { moviesList, loading, error, notFound, totalPages } = this.state;
     const { searchQuery, numberPage, onPageChange, token } = this.props;
-    // console.log(moviesList);
 
     // сообщение об ошибке
     const errorMessage =

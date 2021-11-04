@@ -37,7 +37,6 @@ body{
 }
 .ant-layout{
     position: relative;
-    /* min-height: 100vh; */
 }
 .loader {
     position: absolute;
@@ -115,6 +114,9 @@ body{
     padding: 0 2px;
     margin-right: 10px;
 }
+.ant-card-cover > *{
+    max-width: 200px;
+}
 .ant-card-body_text{
     font-size: 12px;
     line-height: 22px;
@@ -157,14 +159,11 @@ body{
     
     .ant-card {
         padding: 5px 10px 0;
-        /* width: 310px; */
     }
     .ant-card-cover img{
         width: 91px;
     }
-    .ant-card-body{
-
-    }
+ 
     .ant-card-body_text{
         position: absolute;
         bottom:60px;

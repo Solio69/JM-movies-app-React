@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { format } from 'date-fns';
 
+import ApiServise from './ApiServise';
+import iconNoPoster from './no-pictures.png';
+
 import { Card } from 'antd';
 import { Rate } from 'antd';
-
-import ApiServise from './ApiServise';
 
 export default class AntCard extends Component {
   state = {
@@ -31,17 +32,17 @@ export default class AntCard extends Component {
   };
 
   // сокращает текст описания
-  shortenText = (text) => {
+  shortenText = (text, maxCharacters) => {
     const strLength = text.length;
     let newText = '';
 
-    if (strLength > 180) {
-      const lastChar = text.substring(179, 180);
-      if (lastChar === ' ') {
-        newText = text.substring(0, 180) + '...';
+    if (strLength > maxCharacters) {
+      const lastCharacter = text.substring(maxCharacters - 1, maxCharacters);
+      if (lastCharacter === ' ') {
+        newText = text.substring(0, maxCharacters) + '...';
         return newText;
       } else {
-        let closestSpaceIndex = text.substring(0, 180).lastIndexOf(' ');
+        let closestSpaceIndex = text.substring(0, maxCharacters).lastIndexOf(' ');
         newText = text.substring(0, closestSpaceIndex) + '...';
         return newText;
       }
@@ -87,16 +88,27 @@ export default class AntCard extends Component {
     };
   };
 
+  // вовращает отформатированный постер или заглушку
+  showPoster = (image) => {
+    if (image !== null) {
+      return `https://image.tmdb.org/t/p/w200/${image}`;
+    } else {
+      return iconNoPoster;
+    }
+  };
+
   render() {
     // console.log(this.state.showRating)
     const { title, poster_path, overview, release_date, genre_ids, vote_average, rating } = this.props.item;
 
-    // rating = this.state.showRating
     // отформатированный постер
-    const poster = `https://image.tmdb.org/t/p/w200/${poster_path}`;
+    const poster = this.showPoster(poster_path);
 
     // сокращенный текст
-    const shorOverview = this.shortenText(overview);
+    const shorOverview = this.shortenText(overview, 180);
+
+    // сокращенный заголовок
+    const shorTitle = this.shortenText(title, 30);
 
     // форматирование даты
     const releaseDate = release_date ? this.formatDateRelease(release_date) : null;
@@ -128,7 +140,7 @@ export default class AntCard extends Component {
         <div style={ratingСolor} className="ant-card-body_rating">
           {vote_average}
         </div>
-        <div className="ant-card-body_title">{title}</div>
+        <div className="ant-card-body_title">{shorTitle}</div>
         <div className="ant-card-body_data">{releaseDate}</div>
         <div className="ant-card-body_genres">{filmGenres}</div>
         <p className="ant-card-body_text"> {shorOverview}</p>

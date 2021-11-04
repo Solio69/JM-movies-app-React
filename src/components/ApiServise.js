@@ -27,7 +27,7 @@ export default class ApiServise {
     const url = `${this.baseStr}search/movie?api_key=${this.apiKey}&query=${searchQuery}&page=${numberPage}`;
 
     const body = await this.requestGet(url);
-    // console.log(body)
+
     return {
       totalPages: body.total_pages,
       list: body.results,
@@ -37,9 +37,7 @@ export default class ApiServise {
   // получить список жанров
   async getGenres() {
     const url = `${this.baseStr}genre/movie/list?api_key=${this.apiKey}`;
-
     const body = await this.requestGet(url);
-    // console.log(body)
     return body.genres;
   }
 
@@ -60,6 +58,7 @@ export default class ApiServise {
     });
   }
 
+  // удаляет оценку
   async deleteRateFilm(id, token) {
     const url = `${this.baseStr}movie/${id}/rating?api_key=${this.apiKey}&guest_session_id=${token}`;
 
@@ -77,7 +76,7 @@ export default class ApiServise {
     const url = `${this.baseStr}guest_session/${token}/rated/movies?api_key=${this.apiKey}`;
 
     const body = await this.requestGet(url);
-    // console.log(body)
+
     return body;
   }
 }
