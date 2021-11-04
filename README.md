@@ -1,3 +1,5 @@
+https://solio69.github.io/JM-movies-app-React/
+
 Movies App - Начало
 Макеты (Start - базовый, Final - итоговый, мобилку можете сделать в последнюю очередь)
 
