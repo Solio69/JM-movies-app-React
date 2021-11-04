@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.e1a27e66.chunk.css",
-    "main.js": "/static/js/main.04c7ad99.chunk.js",
-    "main.js.map": "/static/js/main.04c7ad99.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.8a69d98f.js",
-    "runtime-main.js.map": "/static/js/runtime-main.8a69d98f.js.map",
-    "static/css/2.786ae0dd.chunk.css": "/static/css/2.786ae0dd.chunk.css",
-    "static/js/2.48ec62c6.chunk.js": "/static/js/2.48ec62c6.chunk.js",
-    "static/js/2.48ec62c6.chunk.js.map": "/static/js/2.48ec62c6.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/2.786ae0dd.chunk.css.map": "/static/css/2.786ae0dd.chunk.css.map",
-    "static/css/main.e1a27e66.chunk.css.map": "/static/css/main.e1a27e66.chunk.css.map",
-    "static/js/2.48ec62c6.chunk.js.LICENSE.txt": "/static/js/2.48ec62c6.chunk.js.LICENSE.txt",
-    "static/media/no-pictures.5533b14a.png": "/static/media/no-pictures.5533b14a.png"
+    "main.css": "/JM-movies-app-React/static/css/main.e1a27e66.chunk.css",
+    "main.js": "/JM-movies-app-React/static/js/main.04c7ad99.chunk.js",
+    "main.js.map": "/JM-movies-app-React/static/js/main.04c7ad99.chunk.js.map",
+    "runtime-main.js": "/JM-movies-app-React/static/js/runtime-main.1d618820.js",
+    "runtime-main.js.map": "/JM-movies-app-React/static/js/runtime-main.1d618820.js.map",
+    "static/css/2.786ae0dd.chunk.css": "/JM-movies-app-React/static/css/2.786ae0dd.chunk.css",
+    "static/js/2.5cf65ae7.chunk.js": "/JM-movies-app-React/static/js/2.5cf65ae7.chunk.js",
+    "static/js/2.5cf65ae7.chunk.js.map": "/JM-movies-app-React/static/js/2.5cf65ae7.chunk.js.map",
+    "index.html": "/JM-movies-app-React/index.html",
+    "static/css/2.786ae0dd.chunk.css.map": "/JM-movies-app-React/static/css/2.786ae0dd.chunk.css.map",
+    "static/css/main.e1a27e66.chunk.css.map": "/JM-movies-app-React/static/css/main.e1a27e66.chunk.css.map",
+    "static/js/2.5cf65ae7.chunk.js.LICENSE.txt": "/JM-movies-app-React/static/js/2.5cf65ae7.chunk.js.LICENSE.txt",
+    "static/media/no-pictures.5533b14a.png": "/JM-movies-app-React/static/media/no-pictures.5533b14a.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.8a69d98f.js",
+    "static/js/runtime-main.1d618820.js",
     "static/css/2.786ae0dd.chunk.css",
-    "static/js/2.48ec62c6.chunk.js",
+    "static/js/2.5cf65ae7.chunk.js",
     "static/css/main.e1a27e66.chunk.css",
     "static/js/main.04c7ad99.chunk.js"
   ]
