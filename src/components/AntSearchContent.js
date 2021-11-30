@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // components
-import ApiServise from './ApiServise';
+import apiServise from '../services/ApiServise';
 import AntCard from './AntCard';
 import AntSpin from './AntSpin';
 
@@ -24,11 +24,8 @@ export default class AntSearchContent extends Component {
 
   // получить список фильмов
   getList = (searchQuery, numberPage) => {
-    // инстанс ApiServise
-    const apiCall = new ApiServise();
-
-    apiCall
-      // делаем запрос а сервер передаем значение из строки поиска
+    apiServise
+      // делаем запрос на сервер передаем значение из строки поиска
       .getMovies(searchQuery, numberPage)
       .then((res) => {
         this.setState({
@@ -37,7 +34,8 @@ export default class AntSearchContent extends Component {
           error: false,
           totalPages: res.totalPages,
         });
-
+      })
+      .then(() => {
         // если поиск не дал результатов (пустой массив)
         if (this.state.moviesList.length === 0) {
           this.setState({
@@ -47,8 +45,9 @@ export default class AntSearchContent extends Component {
       })
       .catch(this.onError);
   };
+
   // задержка запроса
-  debounced = debounce(this.getList, 500);
+  debouncedGetList = debounce(this.getList, 500);
 
   // обрабатывает ошибку данных с сервера
   onError = () => {
@@ -67,13 +66,14 @@ export default class AntSearchContent extends Component {
         error: false,
         notFound: false,
       });
-      this.debounced(searchQuery, numberPage);
+      this.debouncedGetList(searchQuery, numberPage);
     }
   }
 
   render() {
     const { moviesList, loading, error, notFound, totalPages } = this.state;
-    const { searchQuery, numberPage, onPageChange, token } = this.props;
+
+    const { searchQuery, numberPage, onPageChange, changeRateList, rateList } = this.props;
 
     // сообщение об ошибке
     const errorMessage =
@@ -98,7 +98,15 @@ export default class AntSearchContent extends Component {
             <React.Fragment>
               {moviesList.map((item) => {
                 const { id } = item;
-                return <AntCard item={item} key={id} genresList={genresList} token={token} />;
+                return (
+                  <AntCard
+                    item={item}
+                    key={id}
+                    genresList={genresList}
+                    changeRateList={changeRateList}
+                    rateList={rateList}
+                  />
+                );
               })}
             </React.Fragment>
           );

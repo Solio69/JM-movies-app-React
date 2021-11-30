@@ -8,7 +8,8 @@ import { GenresListProvider } from '../GenresListContext';
 import AntHeader from '../AntHeader';
 import AntSearchContent from '../AntSearchContent';
 import AntRatedContent from '../AntRatedContent';
-import ApiServise from '../ApiServise';
+
+import apiServise from '../../services/ApiServise';
 
 import { Layout } from 'antd';
 import { Tabs } from 'antd';
@@ -21,26 +22,27 @@ export default class App extends Component {
     numberPage: 1,
     genresList: [],
     rateList: [],
-    token: null,
   };
 
   componentDidMount() {
-    // инициализация класса вызова API
-    const apiCall = new ApiServise();
-
-    // запускает гостевую сессию
-    apiCall.creatGuestSession().then((guestToken) => {
-      this.setState({
-        token: guestToken,
-      });
-    });
-
     // получает список жанров
-    apiCall.getGenres().then((list) => {
+    apiServise.getGenres().then((list) => {
       this.setState({
         genresList: [...list],
       });
     });
+
+    // если в localStorage нет токена
+    if (!JSON.parse(localStorage.getItem('guestToken'))) {
+      // запускает гостевую сессию
+      apiServise.creatGuestSession().then((guestToken) => {
+        // сохраняет token в localStorage
+        localStorage.setItem('guestToken', JSON.stringify(guestToken));
+      });
+    } else {
+      // если есть, то получает список оцененных и записывает в rateList
+      this.changeRateList();
+    }
   }
 
   // следит за строкой ввода
@@ -58,21 +60,24 @@ export default class App extends Component {
     });
   };
 
+  // изменяет массив с оцененными фильмами
+  changeRateList = () => {
+    // получает список оцененных
+    apiServise.getRatedFilms().then((res) => {
+      this.setState({
+        rateList: [...res.results], // записывает в rateList
+      });
+    });
+  };
+
   // клик по табу
   onTabClick = (key) => {
-    // получает список оцененных
-    if (key === '2') {
-      const apiCall = new ApiServise();
-      apiCall.getRatedFilms(this.state.token).then((res) => {
-        this.setState({
-          rateList: [...res.results],
-        });
-      });
-    }
+    // получает список оцененных и записывает в rateList
+    this.changeRateList();
   };
 
   render() {
-    const { searchQuery, numberPage, genresList, token, rateList } = this.state;
+    const { searchQuery, numberPage, genresList, rateList } = this.state;
     return (
       <GenresListProvider value={genresList}>
         <div className="container">
@@ -84,11 +89,12 @@ export default class App extends Component {
                   searchQuery={searchQuery}
                   numberPage={numberPage}
                   onPageChange={this.onPageChange}
-                  token={token}
+                  changeRateList={this.changeRateList}
+                  rateList={rateList}
                 />
               </TabPane>
               <TabPane tab="Rated" key="2">
-                <AntRatedContent token={token} rateList={rateList} />
+                <AntRatedContent rateList={rateList} changeRateList={this.changeRateList} />
               </TabPane>
             </Tabs>
           </Layout>

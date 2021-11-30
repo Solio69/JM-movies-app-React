@@ -1,6 +1,7 @@
-export default class ApiServise {
-  apiKey = '162123c84167fbeaf28191b62529a99d';
+class ApiServise {
+  apiKey = process.env.REACT_APP_API_KEY;
   baseStr = 'https://api.themoviedb.org/3/';
+  token = JSON.parse(localStorage.getItem('guestToken'));
 
   // шаблон GET запроса
   requestGet = (url) => {
@@ -14,17 +15,22 @@ export default class ApiServise {
 
   // гостевая сессия
   async creatGuestSession() {
-    const url = `${this.baseStr}authentication/guest_session/new?api_key=${this.apiKey}`;
+    const url = new URL(`${this.baseStr}authentication/guest_session/new`);
+    url.searchParams.set('api_key', this.apiKey);
 
     const body = await this.requestGet(url);
-    // console.log(body)
+
     const sessionId = body.guest_session_id;
     return sessionId;
   }
 
   // получить список фильмов по поиску
   async getMovies(searchQuery, numberPage) {
-    const url = `${this.baseStr}search/movie?api_key=${this.apiKey}&query=${searchQuery}&page=${numberPage}`;
+    const url = new URL(`${this.baseStr}search/movie`);
+
+    url.searchParams.set('api_key', this.apiKey);
+    url.searchParams.set('query', searchQuery);
+    url.searchParams.set('page', numberPage);
 
     const body = await this.requestGet(url);
 
@@ -36,14 +42,19 @@ export default class ApiServise {
 
   // получить список жанров
   async getGenres() {
-    const url = `${this.baseStr}genre/movie/list?api_key=${this.apiKey}`;
+    const url = new URL(`${this.baseStr}genre/movie/list`);
+    url.searchParams.set('api_key', this.apiKey);
+
     const body = await this.requestGet(url);
     return body.genres;
   }
 
   // оценивает фильм
-  async rateFilm(id, token, rate) {
-    const url = `${this.baseStr}movie/${id}/rating?api_key=${this.apiKey}&guest_session_id=${token}`;
+  async rateFilm(id, rate) {
+    const url = new URL(`${this.baseStr}movie/${id}/rating`);
+
+    url.searchParams.set('api_key', this.apiKey);
+    url.searchParams.set('guest_session_id', this.token);
 
     const body = {
       value: rate,
@@ -55,12 +66,17 @@ export default class ApiServise {
       method: 'POST',
       body: JSON.stringify(body),
       headers: headers,
+    }).catch((e) => {
+      console.log(e);
     });
   }
 
   // удаляет оценку
-  async deleteRateFilm(id, token) {
-    const url = `${this.baseStr}movie/${id}/rating?api_key=${this.apiKey}&guest_session_id=${token}`;
+  async deleteRateFilm(id) {
+    const url = new URL(`${this.baseStr}movie/${id}/rating`);
+
+    url.searchParams.set('api_key', this.apiKey);
+    url.searchParams.set('guest_session_id', this.token);
 
     const headers = {
       'Content-Type': 'application/json;charset=utf-8',
@@ -72,11 +88,15 @@ export default class ApiServise {
   }
 
   // получает список оцененных фильмов
-  async getRatedFilms(token) {
-    const url = `${this.baseStr}guest_session/${token}/rated/movies?api_key=${this.apiKey}`;
+  async getRatedFilms() {
+    const url = new URL(`${this.baseStr}guest_session/${this.token}/rated/movies`);
+    url.searchParams.set('api_key', this.apiKey);
 
     const body = await this.requestGet(url);
 
     return body;
   }
 }
+const apiServise = new ApiServise();
+
+export default apiServise;

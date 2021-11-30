@@ -4,16 +4,17 @@ import { Content } from 'antd/lib/layout/layout';
 import { GenresListConsumer } from './GenresListContext';
 import AntCard from './AntCard';
 
-const AntRatedContent = ({ rateList }) => (
+const AntRatedContent = ({ rateList, changeRateList }) => (
   <Content>
     <GenresListConsumer>
       {(genresList) => {
         return rateList.map((item) => {
           const { id } = item;
-          return <AntCard item={item} key={id} genresList={genresList} />;
+          return <AntCard item={item} key={id} genresList={genresList} changeRateList={changeRateList} />;
         });
       }}
     </GenresListConsumer>
   </Content>
 );
+
 export default AntRatedContent;
